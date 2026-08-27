@@ -12,11 +12,11 @@ const $=id=>document.getElementById(id);
 const paths=$('paths'),profileName=$('profileName'),supportChip=$('supportChip'),activityLabel=$('activityLabel'),prompt=$('prompt'),instruction=$('instruction'),scene=$('scene'),nextBtn=$('next'),choices=$('choices'),feedback=$('feedback'),bar=$('bar'),usedSupport=$('usedSupport'),resultText=$('resultText'),sensory=$('sensory'),panel=$('panel'),demoProfile=$('demoProfile'),supportLevel=$('supportLevel'),reduced=$('reduced'),quiet=$('quiet'),responseTime=$('responseTime');
 function renderScene(activity,{success=false,hint=false}={}){
  if(activity.sceneImage){
-  scene.innerHTML=`<div class="scene-illustration scene-safe"><img src="${activity.sceneImage}?v=20260827-10" alt="Léo e Estrelinha 3D"></div>`;
-  return;
+   scene.innerHTML=`<div class="scene-3d-background" role="img" aria-label="Léo e Estrelinha 3D"></div>`;
+   return;
  }
  const center=success?'⭐':hint?activity.options.find(o=>o[2])[0]:activity.symbol;
- scene.innerHTML=`<div class="character-scene scene-3d"><img src="assets/leo-estrelinha-3d.webp?v=20260827-10" alt="Léo e Estrelinha 3D"><div class="scene-symbol">${center}</div></div>`;
+ scene.innerHTML=`<div class="character-scene scene-3d"><img src="assets/leo-estrelinha-3d.webp?v=20260827-11" alt="Léo e Estrelinha 3D"><div class="scene-symbol">${center}</div></div>`;
 }
 function speak(text){lastNarration=text;if(settings.quiet||!('speechSynthesis'in window))return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='pt-BR';u.rate=settings.support==='A'?.78:settings.support==='B'?.9:1;window.speechSynthesis.speak(u)}
 function repeatNarration(){speak(lastNarration||`${current.context} ${current.model}`)}
