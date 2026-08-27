@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mundo Singular</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header><div class="brand"><span>✦</span><b>Mundo Singular</b></div><button id="sensory">⚙ Preferências</button></header>
+<main>
+<section id="home" class="screen active"><div class="hero"><p class="tag">COMUNICAÇÃO E LINGUAGEM</p><h1>Eu consigo pedir</h1><p>Vamos aprender juntos, no seu tempo.</p><button class="primary" onclick="startLesson()">Começar atividade</button></div><div class="paths"><article>💧<b>Quero água</b><small>Atividade 01</small></article><article>🍎<b>Quero comer</b><small>Em breve</small></article><article>🙋<b>Preciso de ajuda</b><small>Em breve</small></article></div></section>
+<section id="lesson" class="screen"><div class="lesson-card"><div class="progress"><span id="bar"></span></div><p class="tag">ATIVIDADE 01</p><h2 id="prompt">Estou com sede.</h2><div id="scene" class="scene">🧒 &nbsp; 💧</div><p id="instruction">Quando estou com sede, posso pedir água.</p><button id="next" class="primary" onclick="showChoice()">Continuar</button><div id="choices" class="choices hidden"><button onclick="answer(true)">💧<b>Água</b></button><button onclick="answer(false)">🍎<b>Maçã</b></button></div><p id="feedback" class="feedback"></p></div></section>
+<section id="result" class="screen"><div class="result-card"><div class="big">⭐</div><h2>Atividade concluída!</h2><p>Você praticou como pedir <b>água</b>.</p><div class="metric"><span>Respostas independentes</span><b id="independent">1</b></div><div class="metric"><span>Respostas com apoio</span><b id="supported">0</b></div><button class="primary" onclick="restart()">Fazer novamente</button><button class="secondary" onclick="goHome()">Voltar ao início</button></div></section>
+</main>
+<div id="panel" class="modal hidden"><div><h3>Preferências sensoriais</h3><label><input type="checkbox" id="reduced"> Animações reduzidas</label><label><input type="checkbox" id="quiet"> Modo silencioso</label><label>Tempo de resposta <select><option>Livre</option><option>10 segundos</option><option>20 segundos</option></select></label><button class="primary" onclick="closePanel()">Aplicar</button></div></div>
+<footer>Protótipo educacional • Não realiza diagnóstico clínico</footer><script src="app.js"></script>
+</body></html>
