@@ -2,7 +2,7 @@ const activities=[
 {id:1,icon:'💧',title:'Quero água',context:'Léo está brincando e ficou com sede.',model:'Léo pode pedir: eu quero água.',question:'O que Léo pode pedir?',symbol:'💧',success:'Eu quero água!',options:[['💧','Água',true],['🍎','Maçã',false],['🧸','Brinquedo',false],['📚','Livro',false]]},
 {id:2,icon:'🍽️',title:'Quero comer',context:'Léo percebeu que está com fome.',model:'Léo pode pedir: eu quero comer.',question:'O que Léo pode pedir?',symbol:'🍽️',success:'Eu quero comer!',options:[['🍽️','Comida',true],['🧸','Brinquedo',false],['📚','Livro',false],['⚽','Bola',false]]},
 {id:3,icon:'🚻',title:'Quero ir ao banheiro',context:'Léo precisa ir ao banheiro.',model:'Léo pode avisar: quero ir ao banheiro.',question:'O que Léo pode pedir?',symbol:'🚻',success:'Quero ir ao banheiro!',options:[['🚻','Banheiro',true],['📚','Livro',false],['⚽','Bola',false],['🍎','Maçã',false]]},
-{id:4,icon:'🙋',title:'Preciso de ajuda',context:'Léo tentou e não conseguiu sozinho.',model:'Léo pode pedir: preciso de ajuda.',question:'O que Léo pode pedir?',symbol:'🧩',sceneImage:'assets/cena-ajuda-3d.webp',success:'Preciso de ajuda!',options:[['🙋','Ajuda',true],['⚽','Bola',false],['🍎','Maçã',false],['📚','Livro',false]]},
+{id:4,icon:'🙋',title:'Preciso de ajuda',context:'Léo tentou e não conseguiu sozinho.',model:'Léo pode pedir: preciso de ajuda.',question:'O que Léo pode pedir?',symbol:'🧩',sceneImage:'https://raw.githubusercontent.com/22interliga/Mundo_singular/main/teste-visual/assets/cena-ajuda-3d.webp',success:'Preciso de ajuda!',options:[['🙋','Ajuda',true],['⚽','Bola',false],['🍎','Maçã',false],['📚','Livro',false]]},
 {id:5,icon:'✅',title:'Quero / Não quero',context:'Léo pode mostrar o que prefere.',model:'Léo pode dizer quero ou não quero.',question:'Como Léo pode mostrar sua escolha?',symbol:'💬',success:'Eu posso escolher!',options:[['✅','Quero',true],['❌','Não quero',true]]}
 ];
 
@@ -14,11 +14,12 @@ const paths=$('paths'),profileName=$('profileName'),supportChip=$('supportChip')
 
 function renderScene(activity,{success=false,hint=false}={}){
   if(activity.sceneImage){
-    scene.innerHTML=`<div class="scene-illustration"><img src="${activity.sceneImage}?v=20260827-6" alt="Cena 3D da atividade ${activity.title}"></div>`;
+    const localFallback='assets/leo-estrelinha-3d.webp?v=20260827-8';
+    scene.innerHTML=`<div class="scene-illustration"><img src="${activity.sceneImage}?v=20260827-8" alt="Cena 3D da atividade ${activity.title}" onerror="this.onerror=null;this.src='${localFallback}'"></div>`;
     return;
   }
   const center=success?'⭐':hint?activity.options.find(o=>o[2])[0]:activity.symbol;
-  scene.innerHTML=`<div class="character-scene scene-3d"><img src="assets/leo-estrelinha-3d.webp?v=20260827-6" alt="Léo e Estrelinha 3D"><div class="scene-symbol">${center}</div></div>`;
+  scene.innerHTML=`<div class="character-scene scene-3d"><img src="assets/leo-estrelinha-3d.webp?v=20260827-8" alt="Léo e Estrelinha 3D"><div class="scene-symbol">${center}</div></div>`;
 }
 
 function speak(text){lastNarration=text;if(settings.quiet||!('speechSynthesis'in window))return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='pt-BR';u.rate=settings.support==='A'?.78:settings.support==='B'?.9:1;window.speechSynthesis.speak(u)}
