@@ -1,14 +1,14 @@
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function trailOf(activity){const a=String(activity||'').toLowerCase();if(a.includes('comunica')||a.includes('quero')||a.includes('preciso'))return 'Trilha 1 • Comunicação';if(a.includes('alfabeto')||a.includes('sílaba')||a.includes('silaba'))return 'Trilha 2 • Alfabetização';if(a.includes('palavra'))return 'Trilha 3 • Formação de Palavras';if(a.includes('frase'))return 'Trilha 4 • Frases Simples';if(a.includes('compreensão')||a.includes('compreensao')||a.includes('sequência')||a.includes('sequencia'))return 'Trilha 5 • Compreensão e Sequências';return 'Outras atividades'}
 function load(){
  const data=JSON.parse(localStorage.getItem('mundoSingularDemo')||'[]');
- const i=data.reduce((s,x)=>s+(Number(x.independent)||0),0);
- const a=data.reduce((s,x)=>s+(Number(x.supported)||0),0);
- document.getElementById('sessions').textContent=data.length;
- document.getElementById('independentTotal').textContent=i;
- document.getElementById('supportedTotal').textContent=a;
- const tbody=document.getElementById('history');
- tbody.innerHTML=data.length?[...data].reverse().map(x=>`<tr><td>${x.profile||'Criança A'}</td><td>${x.activity||'-'}</td><td>${x.supportLevel||'A'}</td><td>${Number(x.independent)||0}</td><td>${Number(x.supported)||0}</td><td>${x.date||''}</td></tr>`).join(''):'<tr><td colspan="6">Nenhuma sessão registrada.</td></tr>';
- const t=i+a;
- document.getElementById('insight').textContent=!t?'Realize atividades para gerar uma leitura demonstrativa.':i/t>=.75?'Predominam respostas independentes nas sessões registradas. Observe se o padrão se mantém em diferentes contextos.':i/t>=.4?'Há combinação de respostas independentes e com apoio. Observe em quais atividades as pistas são mais necessárias.':'O apoio foi utilizado com frequência. Observe quais pistas favorecem a participação.';
+ const ind=data.reduce((s,x)=>s+(Number(x.independent)||0),0),sup=data.reduce((s,x)=>s+(Number(x.supported)||0),0),total=ind+sup;
+ document.getElementById('sessions').textContent=data.length;document.getElementById('independentTotal').textContent=ind;document.getElementById('supportedTotal').textContent=sup;document.getElementById('independenceRate').textContent=total?Math.round(ind/total*100)+'%':'0%';
+ const grouped={};data.forEach(x=>{const k=trailOf(x.activity);grouped[k]??={i:0,s:0};grouped[k].i+=Number(x.independent)||0;grouped[k].s+=Number(x.supported)||0});
+ const perf=document.getElementById('trailPerformance'),entries=Object.entries(grouped);perf.innerHTML=entries.length?entries.map(([k,v])=>{const t=v.i+v.s,p=t?Math.round(v.i/t*100):0;return `<div class="trail-row"><b>${esc(k)}</b><div class="trail-bar" aria-label="${p}% de independência"><span style="width:${p}%"></span></div><strong>${p}%</strong></div>`}).join(''):'<p class="edu-muted">As trilhas aparecerão aqui após a realização das atividades.</p>';
+ const acts={};data.forEach(x=>{const k=x.activity||'Atividade';acts[k]??={s:0,n:0};acts[k].s+=Number(x.supported)||0;acts[k].n++});const needs=Object.entries(acts).filter(([,v])=>v.s>0).sort((a,b)=>b[1].s-a[1].s).slice(0,5);document.getElementById('needsSupport').innerHTML=needs.length?needs.map(([k,v])=>`<div class="need-item"><b>${esc(k)}</b><br><span class="edu-muted">Apoio registrado em ${v.s} sessão${v.s===1?'':'ões'}.</span></div>`).join(''):'<p class="edu-muted">Nenhuma atividade com apoio registrada até o momento.</p>';
+ const tbody=document.getElementById('history');tbody.innerHTML=data.length?[...data].reverse().map(x=>`<tr><td>${esc(x.profile||'Criança A')}</td><td>${esc(x.activity||'-')}</td><td>${esc(x.supportLevel||'A')}</td><td>${Number(x.independent)||0}</td><td>${Number(x.supported)||0}</td><td>${esc(x.date||'')}</td></tr>`).join(''):'<tr><td colspan="6">Nenhuma sessão registrada.</td></tr>';
+ document.getElementById('insight').textContent=!total?'Realize atividades para gerar uma leitura demonstrativa.':ind/total>=.75?'Predominam respostas independentes nos registros disponíveis. Observe se esse padrão se mantém entre diferentes atividades e contextos.':ind/total>=.4?'Há combinação de respostas independentes e com apoio. O quadro acima ajuda a identificar em quais atividades as pistas foram mais utilizadas.':'O apoio foi utilizado com frequência nos registros disponíveis. Observe quais tipos de pista favorecem a participação e a autonomia.';
 }
-function clearDemo(){localStorage.removeItem('mundoSingularDemo');load()}
+function clearDemo(){if(confirm('Limpar todos os registros de demonstração deste dispositivo?')){localStorage.removeItem('mundoSingularDemo');load()}}
 window.addEventListener('DOMContentLoaded',load);
